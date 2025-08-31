@@ -1,18 +1,22 @@
 import { useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Menu, X } from 'lucide-react';
 
 const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const location = useLocation();
 
   const navLinks = [
-    { name: 'Home', href: '#home' },
-    { name: 'About Us', href: '#about' },
-    { name: 'Services', href: '#services' },
-    { name: 'Case Studies', href: '#case-studies' },
-    { name: 'Blog', href: '#blog' },
-    { name: 'Contact', href: '#contact' },
+    { name: 'Home', href: '/' },
+    { name: 'About Us', href: '/about' },
+    { name: 'Services', href: '/services' },
+    { name: 'Case Studies', href: '/case-studies' },
+    { name: 'Blog', href: '/blog' },
+    { name: 'Contact', href: '/contact' },
   ];
+
+  const isActive = (href: string) => location.pathname === href;
 
   return (
     <nav className="bg-white/95 backdrop-blur-sm border-b border-border fixed w-full top-0 z-50 shadow-soft">
@@ -29,17 +33,23 @@ const Navigation = () => {
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
             {navLinks.map((link) => (
-              <a
+              <Link
                 key={link.name}
-                href={link.href}
-                className="text-foreground hover:text-primary transition-smooth font-medium"
+                to={link.href}
+                className={`transition-smooth font-medium ${
+                  isActive(link.href)
+                    ? 'text-primary font-semibold'
+                    : 'text-foreground hover:text-primary'
+                }`}
               >
                 {link.name}
-              </a>
+              </Link>
             ))}
-            <Button variant="default" className="bg-gradient-accent text-accent-foreground hover:shadow-gold transition-smooth">
-              Book Free Consultation
-            </Button>
+            <Link to="/contact">
+              <Button variant="default" className="bg-gradient-accent text-accent-foreground hover:shadow-gold transition-smooth">
+                Book Free Consultation
+              </Button>
+            </Link>
           </div>
 
           {/* Mobile Menu Button */}
@@ -60,18 +70,24 @@ const Navigation = () => {
           <div className="md:hidden mt-4 pb-4 border-t border-border">
             <div className="flex flex-col space-y-4 pt-4">
               {navLinks.map((link) => (
-                <a
+                <Link
                   key={link.name}
-                  href={link.href}
-                  className="text-foreground hover:text-primary transition-smooth font-medium"
+                  to={link.href}
+                  className={`transition-smooth font-medium ${
+                    isActive(link.href)
+                      ? 'text-primary font-semibold'
+                      : 'text-foreground hover:text-primary'
+                  }`}
                   onClick={() => setIsMenuOpen(false)}
                 >
                   {link.name}
-                </a>
+                </Link>
               ))}
-              <Button variant="default" className="bg-gradient-accent text-accent-foreground w-full mt-4">
-                Book Free Consultation
-              </Button>
+              <Link to="/contact">
+                <Button variant="default" className="bg-gradient-accent text-accent-foreground w-full mt-4">
+                  Book Free Consultation
+                </Button>
+              </Link>
             </div>
           </div>
         )}
